@@ -1,0 +1,58 @@
+{% extends 'login/layout.html' %}
+
+{% block body %}
+
+
+<div class="container-fluid">
+<nav class="navbar fixed-top navbar-dark bg-dark" style="background-color: green;">
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <h1><span class="badge badge-secondary">Welcome, {{ user.first_name }}</span></h1>
+            </div>
+            <div class="col-2">
+                <form action="{% url 'login:index' %}">
+                    <input class="btn btn-outline-success" type="submit" value="LogOut" style="margin-top: 5px; color: white; border-color: white;">
+                </form>
+            </div>
+        </div>
+</nav>
+</div>
+<div class="container-fluid">
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <form action="{% url 'login:add_task' %}" method="post">
+                {% csrf_token %}
+                {{ add_task_form.as_p }}
+            <input class="btn btn-success" type="submit" value="Create New Task" style="background-color: rgb(7, 84, 249);">
+            </form>
+        </div>
+        <div class="col-3">
+            <h3><span class="badge badge-pill badge-info">{{ curdate }}</span></h3>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <h1>My Tasks</h1>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col" style="font-size: larger; border-top-left-radius: 20px; border-top-right-radius: 20px; border-top:0px;">Task</th>
+                    <th scope="col" style="font-size: larger; border-top-left-radius: 20px; border-top-right-radius: 20px; border-top:0px;">Finish By</th>
+                    <th scope="col" style="font-size: larger; border-top-left-radius: 20px; border-top-right-radius: 20px; border-top:0px;">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr style="background-image: linear-gradient(to right, rgb(82, 219, 250), red);">
+                        <td style="word-break: break-all; font-family: monospace; font-size: 20px;">{{ task.task }}</td>
+                        <td style="word-break: break-all; font-family: monospace; font-size: 20px;">{{ task.finish_by }}</td>
+                        <td style="word-break: break-all; font-family: monospace; font-size: 20px;"><form action="{% url 'login:delete_task' task.id %}" method="post">{% csrf_token %}<input type="submit" value="Delete" class="btn btn-outline-success" style="margin-top: 5px; color: white; border-color: white;"></form></td>
+                    </tr>
+                    {% empty %}
+                        <div>No tasks.</div>
+                    {% endfor %}
+                </tbody>
+            </table>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'login/layout.html' %}
+
+{% block body %}
+
+<nav class="navbar fixed-top navbar-dark bg-dark" style="background-color: green;">
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <h1><span class="badge badge-success">TASKS APP</span></h1>
+        </div>
+    </div>
+</nav>
+    <br>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+        
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            {% endfor %}
+        {% endif%}
+        <h1>Login here!</h1>
+        <form action="{% url 'login:index' %}" method="post">
+            {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <div class="form-group" style="margin: 5px;">
+            <input class="btn btn-success" type="submit" value="Submit">
+            <a style="text-align: right; margin-left: 110px; font-size: 14px;" href="{% url 'login:create_account' %}">Create Account</a>
+        </div>
+        </form>
+        {% if error == "error" %}
+            <p style="color:red; font-size: 12px;">
+                Either the user does not exist or you have entered a wrong password!
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}
